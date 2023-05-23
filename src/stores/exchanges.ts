@@ -19,8 +19,10 @@ export const exchanges = readable(
   ],
   function (set) {
     const interval = setInterval(() => {
-      set(generateRandomExchangeNumbers());
-    }, 500);
+      set(
+        generateRandomExchangeNumbers().sort((e1, e2) => e1.price - e2.price)
+      );
+    }, 3000);
 
     return () => {
       clearInterval(interval);

@@ -1,6 +1,7 @@
 <script>
   import { afterUpdate } from "svelte";
   import { exchanges } from "../stores/exchanges";
+  import { flip } from "svelte/animate";
 
   let pricesBefore = [];
 
@@ -30,7 +31,7 @@
   </thead>
   <tbody>
     {#each $exchanges as exchange, index (exchange.name)}
-      <tr>
+      <tr animate:flip={{ duration: 500 }}>
         <td>{exchange.name}</td>
         <td class={getTransitionClass(exchange.price, index)}>
           {exchange.price}
@@ -42,13 +43,11 @@
 
 <style>
   .flash-green {
-    color: green;
-    animation: flash-green-animation 1s infinite;
+    animation: flash-green-animation 3s;
   }
 
   .flash-red {
-    color: red;
-    animation: flash-red-animation 1s infinite;
+    animation: flash-red-animation 3s;
   }
 
   @keyframes flash-green-animation {
