@@ -55,11 +55,8 @@
     0% {
       color: green;
     }
-    50% {
-      color: black;
-    }
     100% {
-      color: green;
+      color: black;
     }
   }
 
@@ -67,11 +64,8 @@
     0% {
       color: red;
     }
-    50% {
-      color: black;
-    }
     100% {
-      color: red;
+      color: black;
     }
   }
 </style>
