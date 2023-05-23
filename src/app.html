@@ -10,3 +10,113 @@
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>
+<style>
+	@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+  
+	body {
+	  background: linear-gradient(45deg, #9d50bb, #6e48aa);
+	  height: 100vh;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  padding: 0;
+	  margin: 0;
+	  font-family: "Roboto", sans-serif;
+	  color: #333;
+	}
+  
+	.table-container {
+	  background: white;
+	  border-radius: 15px;
+	  padding: 2rem;
+	  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+	  animation: fadeIn 0.3s ease-in;
+	  font-family: "Roboto", sans-serif;
+	}
+  
+	@keyframes fadeIn {
+	  from {
+		opacity: 0;
+		transform: scale(0.98);
+	  }
+	  to {
+		opacity: 1;
+		transform: scale(1);
+	  }
+	}
+  
+	.crypto-table {
+	  width: 100%;
+	  border-collapse: collapse;
+	}
+  
+	.crypto-table th,
+	.crypto-table td {
+	  padding: 20px;
+	  text-align: left;
+	}
+  
+	.crypto-header {
+	  background-color: #f4f4f4;
+	}
+  
+	.header-left,
+	.header-right {
+	  font-size: 1.3em;
+	  font-weight: 700;
+	}
+  
+	.header-left {
+	  border-top-left-radius: 10px;
+	}
+  
+	.header-right {
+	  border-top-right-radius: 10px;
+	}
+  
+	.crypto-row {
+	  background-color: #ffffff;
+	  border-radius: 10px;
+	  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.05);
+	  transition: box-shadow 0.3s ease;
+	}
+  
+	.crypto-row:hover {
+	  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+	}
+  
+	.exchange-name {
+	  font-weight: 500;
+	}
+  
+	.flash-green {
+	  animation: flash-green-animation 3s;
+	}
+  
+	.flash-red {
+	  animation: flash-red-animation 3s;
+	}
+  
+	@keyframes flash-green-animation {
+	  0% {
+		background-color: #d4edda;
+		color: #155724;
+	  }
+	  100% {
+		background-color: inherit;
+		color: inherit;
+	  }
+	}
+  
+	@keyframes flash-red-animation {
+	  0% {
+		background-color: #f8d7da;
+		color: #721c24;
+	  }
+	  100% {
+		background-color: inherit;
+		color: inherit;
+	  }
+	}
+  </style>
+  
