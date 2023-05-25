@@ -1,7 +1,10 @@
 import { readable } from "svelte/store";
 
 // You might want to update this URL to the endpoint of your API
-const API_URL = "http://api-athena.athecoder.com";
+const API_URL =
+  process.env.NODE_ENV === "dev"
+    ? "http://localhost:8080"
+    : "http://api-athena.athecoder.com";
 
 const fetchExchangeData = async () => {
   const response = await fetch(API_URL);
