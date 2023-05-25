@@ -5,7 +5,7 @@ import { derived, readable, writable } from "svelte/store";
 const createCustomStore = () => {
   let subscribersCount = 0;
   let socket;
-  const SOCKET_ADDRESS = "ws://localhost:8080/ws";
+  const SOCKET_ADDRESS = "ws://api-athena.athecoder.com/ws";
 
   const { subscribe, set, update } = writable([]);
 
