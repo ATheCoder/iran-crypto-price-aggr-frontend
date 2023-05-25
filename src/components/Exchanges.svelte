@@ -3,13 +3,21 @@
   import { exchanges } from "../stores/exchanges";
   import { flip } from "svelte/animate";
 
-  let pricesBefore = [];
+  let buyPricesBefore = [];
+  let sellPricesBefore = [];
 
   afterUpdate(() => {
-    pricesBefore = $exchanges.map(({ price }) => price);
+    buyPricesBefore = $exchanges.map(({ buy }) => buy);
+    sellPricesBefore = $exchanges.map(({ sell }) => sell);
   });
 
-  const getTransitionClass = (price, index) => {
+  const getTransitionClass = (action, price, index) => {
+    let pricesBefore;
+    if (action === "buy") {
+      pricesBefore = buyPricesBefore;
+    } else {
+      pricesBefore = sellPricesBefore;
+    }
     if (pricesBefore.length < 1) {
       return "";
     }
@@ -27,15 +35,19 @@
     <thead>
       <tr class="crypto-header">
         <th class="header-left">Exchange</th>
-        <th class="header-right">Buy Price</th>
+        <th class="header-middle">Buy Price</th>
+        <th class="header-right">Sell Price</th>
       </tr>
     </thead>
     <tbody>
       {#each $exchanges as exchange, index (exchange.name)}
         <tr animate:flip={{ duration: 500 }} class="crypto-row">
           <td class="exchange-name">{exchange.name}</td>
-          <td class={getTransitionClass(exchange.price, index)}
-            >{exchange.price}</td
+          <td class={getTransitionClass("buy", exchange.buy, index)}
+            >{exchange.buy}</td
+          >
+          <td class={getTransitionClass("sell", exchange.sell, index)}
+            >{exchange.sell}</td
           >
         </tr>
       {/each}
