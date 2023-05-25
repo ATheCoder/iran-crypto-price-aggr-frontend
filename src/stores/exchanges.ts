@@ -15,7 +15,7 @@ const fetchExchangeData = async () => {
 export const exchanges = readable([], function (set) {
   const interval = setInterval(async () => {
     const newExchangeData = await fetchExchangeData();
-    set(newExchangeData.sort((e1, e2) => e1.buy - e2.price));
+    set(newExchangeData.sort((e1, e2) => e1.buy - e2.buy));
   }, 3000);
 
   return () => {
