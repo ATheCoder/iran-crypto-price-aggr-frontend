@@ -1,4 +1,4 @@
-import { readable } from "svelte/store";
+import { derived, readable, writable } from "svelte/store";
 
 // You might want to update this URL to the endpoint of your API
 const API_URL =
@@ -24,4 +24,45 @@ export const exchanges = readable([], function (set) {
   return () => {
     clearInterval(interval);
   };
+});
+
+export const highlights = writable([]);
+
+let previousValueOfExchanges = [];
+
+exchanges.subscribe(($exchanges) => {
+  if (previousValueOfExchanges.length < 1) {
+    highlights.set($exchanges.map(() => ""));
+    previousValueOfExchanges = $exchanges;
+    return;
+  }
+
+  highlights.set(
+    $exchanges.map((exchange, index) => {
+      const previousValueOfExchange = previousValueOfExchanges[index];
+
+      const currentBuyPrice = exchange.buy;
+      const previousBuyPrice = previousValueOfExchange.buy;
+
+      const currentSellPrice = exchange.sell;
+      const previousSellPrice = previousValueOfExchange.sell;
+
+      return {
+        name: previousValueOfExchange.name,
+        buy:
+          currentBuyPrice > previousBuyPrice
+            ? "flash-green"
+            : currentBuyPrice < previousBuyPrice
+            ? "flash-red"
+            : "",
+        sell:
+          currentSellPrice > previousSellPrice
+            ? "flash-green"
+            : currentSellPrice < previousSellPrice
+            ? "flash-red"
+            : "",
+      };
+    })
+  );
+  previousValueOfExchanges = $exchanges;
 });
