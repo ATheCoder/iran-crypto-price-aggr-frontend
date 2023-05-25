@@ -58,6 +58,16 @@ exchanges.subscribe(($exchanges) => {
       const name = exchange.name;
       const previousValueOfExchange = previousValueOfExchanges[name];
 
+      if (!previousValueOfExchange) {
+        return {
+          ...acc,
+          [name]: {
+            buy: "",
+            sell: "",
+          },
+        };
+      }
+
       const currentBuyPrice = exchange.buy;
       const previousBuyPrice = previousValueOfExchange.buy;
 
