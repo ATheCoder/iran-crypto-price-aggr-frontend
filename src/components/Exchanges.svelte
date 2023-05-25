@@ -13,7 +13,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each $exchanges as exchange, index (exchange.name)}
+      {#each $exchanges as exchange, index ((exchange.name, index))}
         <tr animate:flip={{ duration: 500 }} class="crypto-row">
           <td class="exchange-name">{exchange.name}</td>
           <td class={$highlights[exchange.name]["buy"]}>{exchange.buy}</td>

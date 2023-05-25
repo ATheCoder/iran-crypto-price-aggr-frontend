@@ -1,3 +1,4 @@
+import { tick } from "svelte";
 import { derived, readable, writable } from "svelte/store";
 
 // You might want to update this URL to the endpoint of your API
@@ -48,10 +49,23 @@ export const exchanges = createCustomStore();
 
 let previousValueOfExchanges = {};
 
-export const highlights = derived(exchanges, ($exchanges) => {
+export const highlights = writable(exchanges);
+
+const convertArrayToKeyValue = (arr) => {
+  return arr.reduce((acc, curr) => {
+    return {
+      ...acc,
+      [curr.name]: {
+        buy: curr.buy,
+        sell: curr.sell,
+      },
+    };
+  }, {});
+};
+
+exchanges.subscribe(($exchanges) => {
   if (Object.keys(previousValueOfExchanges).length < 1) {
-    previousValueOfExchanges = convertArrayToKeyValue($exchanges);
-    return $exchanges.reduce((acc: any, curr: any) => {
+    const newHighlights = $exchanges.reduce((acc: any, curr: any) => {
       return {
         ...acc,
         [curr.name]: {
@@ -60,6 +74,8 @@ export const highlights = derived(exchanges, ($exchanges) => {
         },
       };
     }, {});
+    highlights.set(newHighlights);
+    previousValueOfExchanges = convertArrayToKeyValue($exchanges);
   }
 
   const newHighlights = $exchanges.reduce((acc, exchange) => {
@@ -98,17 +114,19 @@ export const highlights = derived(exchanges, ($exchanges) => {
       },
     };
   }, {});
-
-  return newHighlights;
+  previousValueOfExchanges = convertArrayToKeyValue($exchanges);
+  highlights.set(
+    $exchanges.reduce((acc: any, curr: any) => {
+      return {
+        ...acc,
+        [curr.name]: {
+          buy: "",
+          sell: "",
+        },
+      };
+    }, {})
+  );
+  tick().then(() => {
+    highlights.set(newHighlights);
+  });
 });
-const convertArrayToKeyValue = (arr) => {
-  return arr.reduce((acc, curr) => {
-    return {
-      ...acc,
-      [curr.name]: {
-        buy: curr.buy,
-        sell: curr.sell,
-      },
-    };
-  }, {});
-};
