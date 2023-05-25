@@ -26,20 +26,37 @@ export const exchanges = readable([], function (set) {
   };
 });
 
-export const highlights = writable([]);
+export const highlights = writable({});
 
-let previousValueOfExchanges = [];
+let previousValueOfExchanges = {};
+
+const convertArrayToKeyValue = (arr) => {
+  return arr.reduce((acc, curr) => {
+    return {
+      ...acc,
+      [curr.name]: {
+        buy: curr.buy,
+        sell: curr.sell,
+      },
+    };
+  }, {});
+};
 
 exchanges.subscribe(($exchanges) => {
-  if (previousValueOfExchanges.length < 1) {
-    highlights.set($exchanges.map(() => ""));
-    previousValueOfExchanges = $exchanges;
+  if (Object.keys(previousValueOfExchanges).length < 1) {
+    highlights.set(
+      $exchanges.reduce((acc, curr) => {
+        return { ...acc, [curr.name]: { buy: "", sell: "" } };
+      }, {})
+    );
+    previousValueOfExchanges = convertArrayToKeyValue($exchanges);
     return;
   }
 
   highlights.set(
-    $exchanges.map((exchange, index) => {
-      const previousValueOfExchange = previousValueOfExchanges[index];
+    $exchanges.reduce((acc, exchange) => {
+      const name = exchange.name;
+      const previousValueOfExchange = previousValueOfExchanges[name];
 
       const currentBuyPrice = exchange.buy;
       const previousBuyPrice = previousValueOfExchange.buy;
@@ -48,21 +65,23 @@ exchanges.subscribe(($exchanges) => {
       const previousSellPrice = previousValueOfExchange.sell;
 
       return {
-        name: previousValueOfExchange.name,
-        buy:
-          currentBuyPrice > previousBuyPrice
-            ? "flash-green"
-            : currentBuyPrice < previousBuyPrice
-            ? "flash-red"
-            : "",
-        sell:
-          currentSellPrice > previousSellPrice
-            ? "flash-green"
-            : currentSellPrice < previousSellPrice
-            ? "flash-red"
-            : "",
+        ...acc,
+        [name]: {
+          buy:
+            currentBuyPrice > previousBuyPrice
+              ? "flash-green"
+              : currentBuyPrice < previousBuyPrice
+              ? "flash-red"
+              : "",
+          sell:
+            currentSellPrice > previousSellPrice
+              ? "flash-green"
+              : currentSellPrice < previousSellPrice
+              ? "flash-red"
+              : "",
+        },
       };
-    })
+    }, {})
   );
-  previousValueOfExchanges = $exchanges;
+  previousValueOfExchanges = convertArrayToKeyValue($exchanges);
 });

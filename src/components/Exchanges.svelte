@@ -1,5 +1,4 @@
 <script>
-  import { afterUpdate } from "svelte";
   import { exchanges, highlights } from "../stores/exchanges";
   import { flip } from "svelte/animate";
 </script>
@@ -17,8 +16,8 @@
       {#each $exchanges as exchange, index (exchange.name)}
         <tr animate:flip={{ duration: 500 }} class="crypto-row">
           <td class="exchange-name">{exchange.name}</td>
-          <td class={$highlights[index]["buy"]}>{exchange.buy}</td>
-          <td class={$highlights[index]["sell"]}>{exchange.sell}</td>
+          <td class={$highlights[exchange.name]["buy"]}>{exchange.buy}</td>
+          <td class={$highlights[exchange.name]["sell"]}>{exchange.sell}</td>
         </tr>
       {/each}
     </tbody>
