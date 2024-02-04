@@ -35,7 +35,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each readableExchanges as exchange, index ((exchange.name, index))}
+      {#each readableExchanges as exchange, index (exchange.name)}
         <tr animate:flip={{ duration: 500 }} class="crypto-row">
           <td class="exchange-name">{exchange.name}</td>
           <PriceBox price={exchange.buy} />
