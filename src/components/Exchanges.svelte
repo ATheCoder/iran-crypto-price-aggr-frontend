@@ -1,7 +1,22 @@
 <script>
-  import { exchanges, highlights } from "../stores/exchanges";
+  import { onMount } from "svelte";
+  import {
+    createWebsocketStore,
+    exchanges,
+    highlights,
+  } from "../stores/exchanges";
   import { flip } from "svelte/animate";
   import CryptoIcon from "./CryptoIcon.svelte";
+  import { socketStore } from "../stores/readableSocket";
+  import PriceBox from "./PriceBox.svelte";
+
+  let readableExchanges = [];
+
+  onMount(() => {
+    return socketStore.subscribe((val) => {
+      readableExchanges = val;
+    });
+  });
 </script>
 
 <div class="table-container">
@@ -20,11 +35,11 @@
       </tr>
     </thead>
     <tbody>
-      {#each $exchanges as exchange, index ((exchange.name, index))}
+      {#each readableExchanges as exchange, index ((exchange.name, index))}
         <tr animate:flip={{ duration: 500 }} class="crypto-row">
           <td class="exchange-name">{exchange.name}</td>
-          <td class={$highlights[exchange.name]["buy"]}>{exchange.buy}</td>
-          <td class={$highlights[exchange.name]["sell"]}>{exchange.sell}</td>
+          <PriceBox price={exchange.buy} />
+          <PriceBox price={exchange.sell} />
         </tr>
       {/each}
     </tbody>
